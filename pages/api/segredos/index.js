@@ -9,8 +9,11 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const documentos = await Documento.find({}) /* find all the data in our database */
-        res.status(200).json({ success: true, data: documentos })
+        const documentos = await Documento.find({}).sort({ dataAt: -1 }).limit(88) /* find all the data in our database */
+        
+        // res.status(200).json({ success: true, data: documentos })
+        res.status(200).json(documentos)
+
       } catch (error) {
         res.status(400).json({ success: false })
       }
