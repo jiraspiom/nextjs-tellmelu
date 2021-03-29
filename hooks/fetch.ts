@@ -14,14 +14,14 @@ import api from "../services/api";
 
 // usando axios
 export const useFetch = <Data = any, Error = any>(url: string) => {
-// export const useFetch = (url: string) => {
-    const { data, error } = useSWR<Data, Error>(url, async url => {
-    // const { data } = useSWR(url, async url => {
-        const response = await api.get(url)
+	// export const useFetch = (url: string) => {
+	const { data, error } = useSWR<Data, Error>(url, async url => {
+		// const { data } = useSWR(url, async url => {
+		const response = await api.get(url)
 
-        return response.data;
-    })
+		return response.data;
+	})
 
-    return { data, error }
-    // return { data }
+	return { data, error }
+	// return { data }
 }
