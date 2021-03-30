@@ -1,27 +1,12 @@
 import useSWR from "swr"
-import api from "../services/api";
 
-// export const useFetch = <Data = any, Error = any>(url: string) => {
-//     const { data, error } = useSWR<Data, Error>(url, async (url) => {
-//         const response = await fetch(url)
-//         const data = await response.json();
-
-//         return data;
-//     })
-
-//     return { data, error }
-// }
-
-// usando axios
 export const useFetch = <Data = any, Error = any>(url: string) => {
-	// export const useFetch = (url: string) => {
-	const { data, error } = useSWR<Data, Error>(url, async url => {
-		// const { data } = useSWR(url, async url => {
-		const response = await api.get(url)
+    const { data, error } = useSWR<Data, Error>(url, async (url) => {
+        const response = await fetch(url)
+        const data = await response.json();
 
-		return response.data;
-	})
+        return data;
+    })
 
-	return { data, error }
-	// return { data }
+    return { data, error }
 }

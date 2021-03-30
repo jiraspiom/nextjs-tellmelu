@@ -1,5 +1,6 @@
 import AdicionarSegredo from '@/components/adicionarSegredo';
-import { useFetch } from '@/hooks/fetch';
+import NavBar from '@/components/navbar';
+import { useAxios } from '@/hooks/axios';
 import Link from 'next/link';
 import React from 'react';
 
@@ -12,12 +13,16 @@ interface ISegredo {
 
 function Segredos(segredos) {
 
-    const  {data}  = useFetch<ISegredo[]>('/api/segredos');
+    const  {data}  = useAxios<ISegredo[]>('/api/segredos');
 
     return (
         <div>
+
+            <NavBar/>
+
             {/* cabeçalho para adiconar segredo */}
-            <AdicionarSegredo/>
+            {/* <AdicionarSegredo/> */}
+
 
             {data?.map((segredo) => (
                 <div className="row" key={segredo._id}>

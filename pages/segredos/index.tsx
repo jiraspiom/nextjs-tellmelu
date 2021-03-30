@@ -51,6 +51,7 @@ const Index = ({ segredos }) => (
 export async function getServerSideProps() {
   await dbConnect()
 
+  //acessando a base direto do server site props
   const result = Segredo.find({}).sort({ dataAt: -1 }).limit(88)
 
   const segredos = JSON.parse(JSON.stringify(result))
