@@ -1,9 +1,10 @@
 
-function About({ data }) {
+function About({ sobre }) {
 
   return (
-    <div>
-      sobre...
+    <div
+      className="center" id="sobre">
+      {sobre}
     </div>
   )
 }
@@ -30,15 +31,15 @@ function About({ data }) {
 
 export default About
 
-// export async function getStaticProps() {
-//   const res = await fetch("http://localhost:3000/api/segredos");
-//   const json = await res.json();
+export async function getStaticProps() {
+  const res = await fetch("http://localhost:3000/api/segredos");
+  const json = await res.json();
+  // const  {data}  = useFechSimples<ISegredo[]>('/api/segredos');
 
-//   // const  {data}  = useFechSimples<ISegredo[]>('/api/segredos');
-
-//   return {
-//     props: {
-//       data: json
-//     },
-//   };
-// }
+  return {
+    props: {
+      sobre: "sobre...",
+      autor: 'desconhecido...'
+    },
+  };
+}
