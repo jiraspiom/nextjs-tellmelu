@@ -1,4 +1,36 @@
+import api from "@/services/api"
+import setCor from "@/services/cor"
+import { useRouter } from "next/router"
+import React, { useState } from "react"
+import { mutate } from "swr"
+
 export default function AdicionarSegredo() {
+	interface ISegredo {
+		segredo: string,
+		cor: string
+	}
+
+	const [model, setModel] = useState<ISegredo>({
+		segredo: '',
+		cor: setCor()
+	})
+
+	const handleChange = (event) => {
+		const target = event.target
+
+		setModel({
+			...model,
+			[target.name]: target.value,
+		})
+	}
+
+	// const updateModel = (event: FormEvent<HTMLInputElement>) => {}
+	// const onSubmit    = (event: FormEvent<HTMLFormElement>)=>{}
+
+	const updateModel = async () => {
+		await api.post('/api/segredos', model);
+		
+	}
 
 	return (
 		<div>
@@ -8,16 +40,23 @@ export default function AdicionarSegredo() {
 
 			<div className="row">
 				<div className="col s12 m3 "></div>
-				<form className="col s12 m6" action="/" method="POST">
+				<div className="col s12 m6">
 					<div className="card blue-grey darken-2">
 						<div className="card-content white-text">
 							<span className="card-title"></span>
-							<textarea name="segredo" id="segredo" placeholder="you need help..."
-								className="materialize-textarea white-text" required ></textarea>
-							<button className="btn waves-effect waves-light right pulse" >tellme</button>
+
+							<textarea value={model.segredo} onChange={handleChange}
+								name="segredo" id="segredo" placeholder="you need help..."
+								className="materialize-textarea white-text" required >
+							</textarea>
+
+							<button onClick={updateModel}
+								className="btn waves-effect waves-light right pulse" >tellme
+							</button>
+
 						</div>
 					</div>
-				</form>
+				</div>
 				<div className="col s12 m3"></div>
 			</div>
 

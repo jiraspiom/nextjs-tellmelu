@@ -15,13 +15,13 @@ import api from "../services/api";
 // usando axios
 export const useAxios = <Data = any, Error = any>(url: string) => {
 	// export const useFetch = (url: string) => {
-	const { data, error } = useSWR<Data, Error>(url, async url => {
+	const { data, error, mutate } = useSWR<Data, Error>(url, async url => {
 		// const { data } = useSWR(url, async url => {
 		const response = await api.get(url)
 
 		return response.data;
 	})
 
-	return { data, error }
+	return { data, error, mutate }
 	// return { data }
 }

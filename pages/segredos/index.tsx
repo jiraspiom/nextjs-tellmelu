@@ -1,65 +1,104 @@
+import { useAxios } from '@/hooks/axios';
+import api from '@/services/api';
+import setCor from '@/services/cor';
 import Link from 'next/link'
-import dbConnect from '../../utils/dbConnect'
-import Segredo from '../../models/Segredo'
+import React, { useState } from 'react';
+import useSWR, { mutate } from 'swr'
 
-const Index = ({ segredos }) => (
-  <>
-    {/* Create a card for each pet */}
+// interface ISegredo {
+//   _id: string
+//   segredo: string,
+//   cor: string
+// }
 
-    {/* botao zinho de adicionar */}
-    <div className="fixed-action-btn click-to-toggle">
-      <a href="/" className="btn-floating btn-large green-blue"> <i className="material-icons">add</i> </a>
-    </div>
+interface ISegredo {
+  _id: string,
+  segredo: string,
+  cor: string
+}
 
-    <div className="row">
-      <div className="col s12 m3"></div>
-      <form className="col s12 m6" action="/" method="POST">
-        <div className="card  blue-grey darken-2">
-          <div className="card-content white-text">
-            <span className="card-title"></span>
-            <textarea name="segredo" id="segredo" placeholder="you need help..."
-              className="materialize-textarea white-text" required ></textarea>
-            <button className="btn waves-effect waves-light pulse" >tellme</button>
-          </div>
-        </div>
-      </form>
-      <div className="col s12 m3"></div>
-    </div>
+const Index = () => {
+  const { data, mutate } = useAxios<ISegredo[]>('/api/segredos');
 
-    {segredos.map((segredo) => (
-      <div className="row" key={segredo._id}>
+  interface ISegredoState {
+    segredo: string,
+    cor: string,
+    dataAt: any
+  }
+
+  const [model, setModel] = useState<ISegredoState>({
+    segredo: '',
+    cor: '',
+    dataAt: ''
+  })
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    const target = event.target
+
+    setModel({
+      ...model,
+      [target.name]: target.value,
+    })
+  }
+
+
+  const handleSubmit = () => {
+    model.dataAt = Date.now()
+    model.cor = setCor()
+    api.post('/api/segredos', model)
+    console.log('salvou...', Date.now())
+    
+    model.segredo = ''
+    model.cor = ''
+    model.dataAt = ''
+
+    mutate()
+
+  }
+  return (
+    <>
+      <div className="row">
         <div className="col s12 m3"></div>
         <div className="col s12 m6">
-
-          <div className={`card ${segredo.cor}`}>
-            <div className={"card-content white-text"}>
+          <div className="card  blue-grey darken-2">
+            <div className="card-content white-text">
               <span className="card-title"></span>
-              <p >{segredo.segredo} </p>
-            </div>
-            <div className="card-action" >
-              <Link href="/" >good </Link>
+
+              <textarea value={model.segredo} onChange={handleChange}
+                name="segredo" id="segredo" placeholder="you need help..."
+                className="materialize-textarea white-text" required >
+              </textarea>
+              <button onClick={handleSubmit}
+                className="btn waves-effect waves-light right pulse" >tellme
+							</button>
+
             </div>
           </div>
         </div>
         <div className="col s12 m3"></div>
       </div>
-    ))}
-  </>
-)
 
+      {data?.map((seg) => (
+        <div className="row" key={seg._id}>
+          <div className="col s12 m3"></div>
+          <div className="col s12 m6">
 
-export async function getServerSideProps() {
-  await dbConnect()
-
-  //acessando a base direto do server site props
-  const result = Segredo.find({}).sort({ dataAt: -1 }).limit(88)
-
-  const segredos = JSON.parse(JSON.stringify(result))
-  return {
-    props: {
-      segredos: segredos
-    }
-  }
+            <div className={`card ${seg.cor}`}>
+              <div className={"card-content white-text"}>
+                <span className="card-title"></span>
+                <p >{seg.segredo} </p>
+              </div>
+              <div className="card-action" >
+                <Link href="/" >good </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col s12 m3"></div>
+        </div>
+      ))}
+    </>
+  )
 }
 
 export default Index
