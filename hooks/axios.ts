@@ -12,16 +12,12 @@ import api from "../services/api";
 //     return { data, error }
 // }
 
-// usando axios
+// usando axios com interface
 export const useAxios = <Data = any, Error = any>(url: string) => {
-	// export const useFetch = (url: string) => {
 	const { data, error, mutate } = useSWR<Data, Error>(url, async url => {
-		// const { data } = useSWR(url, async url => {
 		const response = await api.get(url)
 
 		return response.data;
 	})
-
 	return { data, error, mutate }
-	// return { data }
 }
