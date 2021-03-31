@@ -32,7 +32,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+vercel.json
 
 teste.js
 teste.html
-vercel.json
