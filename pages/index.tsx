@@ -3,7 +3,6 @@ import api from '@/services/api';
 import setCor from '@/services/cor';
 import Link from 'next/link'
 import React, { useState } from 'react';
-import useSWR, { mutate } from 'swr'
 
 // interface ISegredo {
 //   _id: string
@@ -80,7 +79,7 @@ const Index = () => {
       </div>
 
       {data?.map((seg) => (
-        <div className="row" key={seg._id}>
+        <div className="card" key={seg._id}>
           <div className="col s12 m3"></div>
           <div className="col s12 m6">
 

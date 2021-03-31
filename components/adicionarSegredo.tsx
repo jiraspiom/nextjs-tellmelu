@@ -1,8 +1,6 @@
 import api from "@/services/api"
 import setCor from "@/services/cor"
-import { useRouter } from "next/router"
 import React, { useState } from "react"
-import { mutate } from "swr"
 
 export default function AdicionarSegredo() {
 	interface ISegredo {
