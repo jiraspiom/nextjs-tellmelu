@@ -13,11 +13,11 @@ import api from "../services/api";
 // }
 
 // usando axios com interface
-export const useAxios = <Data = any, Error = any>(url: string) => {
+export const useAxios = <Data = any, Error = any>(url: string, dados: any) => {
 	const { data, error, mutate } = useSWR<Data, Error>(url, async url => {
 		const response = await api.get(url)
 
 		return response.data;
-	})
+	}, dados)
 	return { data, error, mutate }
 }

@@ -14,7 +14,7 @@ interface ISegredo {
 
 function Segredos({ segredos }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
-	const { data } = useAxios<ISegredo[]>('/api/segredos');
+	const { data } = useAxios<ISegredo[]>('/api/segredos', segredos);
 
 	return (
 		<div>
