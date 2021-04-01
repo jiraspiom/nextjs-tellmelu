@@ -18,7 +18,7 @@ export const getStaticPaths: GetStaticPaths = async ()=> {
 
 	return {
 		paths,
-		fallback: false
+		fallback: true
 	}
 }
 
@@ -41,7 +41,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	}
 }
 
-// posts will be populated at build time by getStaticProps()
 function SegredoIndex({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
 		<ul>
