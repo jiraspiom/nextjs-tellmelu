@@ -10,9 +10,9 @@ interface ISegredo {
   cor: string
 }
 
-const Index = ({initialData}) => {
+const Index = () => {
   //descontruo a arrai data e dou o nome dele de segredos
-  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos', initialData );
+  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos' );
   interface ISegredoState {
     segredo: string,
     cor: string,
