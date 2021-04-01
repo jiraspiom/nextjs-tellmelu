@@ -17,7 +17,8 @@ interface ISegredo {
 }
 
 const Index = () => {
-  const { data, mutate } = useAxios<ISegredo[]>('/api/segredos');
+  //descontruo a arrai data e dou o nome dele de segredos
+  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
 
   interface ISegredoState {
     segredo: string,
@@ -41,13 +42,16 @@ const Index = () => {
     })
   }
 
-
   const handleSubmit = () => {
     model.dataAt = Date.now()
     model.cor = setCor()
-    api.post('/api/segredos', model)
-    console.log('salvou...', Date.now())
-    
+
+    api.post('/api/segredos', model).then(res => {
+      console.log('salvou...', Date.now())
+    }).catch(error => {
+      console.log('erro ao salvar registro: ', error)
+    })
+
     model.segredo = ''
     model.cor = ''
     model.dataAt = ''
@@ -78,15 +82,15 @@ const Index = () => {
         <div className="col s12 m3"></div>
       </div>
 
-      {data?.map((seg) => (
-        <div className="card" key={seg._id}>
+      {segredos?.map((item) => (
+        <div className="card" key={item._id}>
           <div className="col s12 m3"></div>
           <div className="col s12 m6">
 
-            <div className={`card ${seg.cor}`}>
+            <div className={`card ${item.cor}`}>
               <div className={"card-content white-text"}>
                 <span className="card-title"></span>
-                <p >{seg.segredo} </p>
+                <p >{item.segredo} </p>
               </div>
               <div className="card-action" >
                 <Link href="/" >good </Link>

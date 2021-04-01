@@ -1,5 +1,6 @@
 import AdicionarSegredo from '@/components/adicionarSegredo';
 import { useAxios } from '@/hooks/axios';
+import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
@@ -11,7 +12,7 @@ interface ISegredo {
 }
 
 
-function Segredos() {
+function Segredos({ segredos }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 	const { data } = useAxios<ISegredo[]>('/api/segredos');
 
@@ -20,9 +21,9 @@ function Segredos() {
 
 			{/* <NavBar /> */}
 
-			<AdicionarSegredo/>
+			<AdicionarSegredo />
 
-			{data?.map((segredo) => (
+			{segredos?.map((segredo) => (
 				<div className="row" key={segredo._id}>
 					<div className="col s12 m3"></div>
 					<div className="col s12 m6">
@@ -46,3 +47,19 @@ function Segredos() {
 }
 export default Segredos
 
+export const getServerSideProps: GetServerSideProps = async () => {
+	type Segredo = {
+		_id: string,
+		segredo: string,
+		cor: string,
+	}
+
+	const res = await fetch(`${process.env.HOST}/api/segredos`)
+	const segredos: Segredo[] = await res.json()
+
+	return {
+		props: {
+			segredos,
+		}
+	}
+}

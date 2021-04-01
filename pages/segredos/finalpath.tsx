@@ -1,54 +1,42 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 
-// This function gets called at build time
-export const getStaticPaths: GetStaticPaths = async ()=> {
-	type Segredo = {
-		_id: string,
-		segredo: string,
-		cor: string,
-	}
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:3000/api/segredos')
-	const segredos: Segredo[] = await res.json()
 
-	// Get the paths we want to pre-render based on posts
-	const paths = segredos.map((segredo) => ({
-		params: { id: segredo._id },
-	}))
-
-	return {
-		paths,
-		fallback: true
-	}
-}
-
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-	type Segredo = {
-		_id: string,
-		segredo: string,
-		cor: string,
-	}
-
-	const res = await fetch('http://localhost:3000/api/segredos')
-	const segredos: Segredo[] = await res.json()
-
-	return {
-		props: {
-			segredos,
-		},
-		// revalidate: 1
-	}
-}
 
 function SegredoIndex({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
 		<ul>
-			{segredos.map((segredo) => (
-				<li key={segredo._id}>{segredo.segredo}</li>
+			{segredos.map((segred) => (
+				<li key={segred._id}>{segred.segredo}</li>
 			))}
 		</ul>
 	)
 }
 
 export default SegredoIndex
+
+  
+  export async function getStaticPaths() {
+
+	const res = await fetch(`${process.env.HOST}/api/segredos`)
+	const posts = await res.json()
+
+	const paths = posts.map((post) => ({
+	  params: { _id: post._id },
+	}))
+
+	return { paths, fallback: true }
+  }
+  
+  // This also gets called at build time
+  export async function getStaticProps( context ) {
+
+	console.log(context)
+	
+	// If the route is like /posts/1, then params.id is 1
+	const res = await fetch(`${process.env.HOST}/api/segredos`)
+	const segredos = await res.json()
+  
+	// Pass post data to the page via props
+	return { props: { segredos } }
+  }
+  

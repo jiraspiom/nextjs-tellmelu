@@ -7,7 +7,7 @@ export const getStaticProps: GetStaticProps = async () => {
 		cor: string,
 	}
 
-  const res = await fetch('http://localhost:3000/api/segredos')
+  const res = await fetch(`${process.env.HOST}/api/segredos`)
   const segredos: Segredo[] = await res.json()
 
   return {
@@ -19,7 +19,7 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 // posts will be populated at build time by getStaticProps()
-function Blog({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
+function SegredoIndex({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <ul>
       {segredos.map((segredo) => (
@@ -29,4 +29,4 @@ function Blog({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
   )
 }
 
-export default Blog
+export default SegredoIndex
