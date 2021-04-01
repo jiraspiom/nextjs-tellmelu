@@ -16,7 +16,9 @@ export default async function handler(req, res) {
         if (!documento) {
           return res.status(400).json({ success: false })
         }
-        res.status(200).json({ success: true, data: documento })
+        // res.status(200).json({ success: true, data: documento })
+        res.status(200).json(documento)
+
       } catch (error) {
         res.status(400).json({ success: false })
       }
