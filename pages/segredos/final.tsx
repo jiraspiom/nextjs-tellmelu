@@ -23,7 +23,7 @@ function Blog({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <ul>
       {segredos.map((segredo) => (
-        <li>{segredo.segredo}</li>
+        <li key={segredo._id}>{segredo.segredo}</li>
       ))}
     </ul>
   )
