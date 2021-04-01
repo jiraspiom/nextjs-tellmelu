@@ -21,6 +21,7 @@ function Segredos({ segredos }: InferGetServerSidePropsType<typeof getServerSide
 
 			{/* <NavBar /> */}
 
+
 			<AdicionarSegredo />
 
 			{segredos?.map((segredo) => (
