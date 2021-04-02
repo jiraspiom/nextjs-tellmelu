@@ -100,10 +100,10 @@ const Index = () => {
 export default Index
 
 
-export async function getServerSideProps() {
-  const res = await fetch(`${process.env.HOST}/api/segredos`)
+// export async function getServerSideProps() {
+//   const res = await fetch(`${process.env.HOST}/api/segredos`)
 	
-  const segredos = await res.json()
+//   const segredos = await res.json()
 
-  return { props: { initialData: segredos } }
-}
+//   return { props: { initialData: segredos } }
+// }

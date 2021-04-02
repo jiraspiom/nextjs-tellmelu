@@ -1,5 +1,5 @@
 import AdicionarSegredo from '@/components/adicionarSegredo';
-import { useAxios } from '@/hooks/axiossimples';
+import { useAxios } from '@/hooks/axios';
 import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -12,9 +12,9 @@ interface ISegredo {
 }
 
 
-function Segredos({ segredos }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Segredos() {
 
-	const { data } = useAxios('/api/segredos', segredos);
+	const { data: segredos } = useAxios<ISegredo[]>('/api/segredos' );
 
 	return (
 		<div>
