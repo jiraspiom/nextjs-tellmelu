@@ -21,7 +21,6 @@ function Segredos() {
 
 			{/* <NavBar /> */}
 
-
 			<AdicionarSegredo />
 
 			{segredos?.map((segredo) => (
