@@ -1,4 +1,4 @@
-import { useAxios } from '@/hooks/axios';
+import { useAxios } from '@/hooks/axiosinicial';
 import api from '@/services/api';
 import setCor from '@/services/cor';
 import Link from 'next/link'
@@ -10,9 +10,9 @@ interface ISegredo {
   cor: string
 }
 
-const Index = () => {
+const Index = (initialData) => {
   //descontruo a arrai data e dou o nome dele de segredos
-  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
+  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos', initialData);
   interface ISegredoState {
     segredo: string,
     cor: string,
@@ -103,10 +103,10 @@ const Index = () => {
 export default Index
 
 
-// export async function getServerSideProps() {
-//   const res = await fetch(`${process.env.HOST}/api/segredos`)
+export async function getStaticProps() {
+  const res = await fetch(`${process.env.HOST}/api/segredos`)
 
-//   const segredos = await res.json()
+  const segredos = await res.json()
 
-//   return { props: { initialData: segredos } }
-// }
+  return { props: { initialData: segredos } }
+}
