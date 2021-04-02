@@ -51,7 +51,7 @@ const Index = ({initialData}) => {
     model.cor = ''
     model.dataAt = ''
 
-    router.push('/')
+    router.push('/tellme')
 
     // mutate()
 
