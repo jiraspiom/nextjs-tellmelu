@@ -1,7 +1,9 @@
-import { useAxios } from '@/hooks/axiosinicial';
+
 import api from '@/services/api';
 import setCor from '@/services/cor';
+import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 interface ISegredo {
@@ -10,9 +12,13 @@ interface ISegredo {
   cor: string
 }
 
-const Index = (initialData) => {
+
+
+
+const Index: NextPage = ({ initialData }: InferGetStaticPropsType<typeof getStaticProps>) => {
   //descontruo a arrai data e dou o nome dele de segredos
-  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos', initialData);
+  // const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
+
   interface ISegredoState {
     segredo: string,
     cor: string,
@@ -36,6 +42,7 @@ const Index = (initialData) => {
   }
 
   const handleSubmit = () => {
+    const router = useRouter()
     model.dataAt = Date.now()
     model.cor = setCor()
 
@@ -45,11 +52,13 @@ const Index = (initialData) => {
       console.log('erro ao salvar registro: ', error)
     })
 
-    model.segredo = ''
-    model.cor = ''
-    model.dataAt = ''
+    router.push('/')
 
-    mutate()
+    // model.segredo = ''
+    // model.cor = ''
+    // model.dataAt = ''
+
+    // mutate()
 
   }
   return (
@@ -69,6 +78,7 @@ const Index = (initialData) => {
                 className="btn waves-effect waves-light right pulse" >tellme
 							</button>
 
+
             </div>
           </div>
         </div>
@@ -77,7 +87,7 @@ const Index = (initialData) => {
 
 
       <div className="container">
-        {segredos?.map((item) => (
+        {initialData?.map((item) => (
           <div className="card" key={item._id}>
             <div className="col s12 m3"></div>
             <div className="col s12 m6">
@@ -103,10 +113,22 @@ const Index = (initialData) => {
 export default Index
 
 
-export async function getStaticProps() {
-  const res = await fetch(`${process.env.HOST}/api/segredos`)
+export const getStaticProps: GetStaticProps = async () => {
+  type Segredo = {
+    _id: string,
+    segredo: string,
+    cor: string
+  }
 
-  const segredos = await res.json()
+  // const res = await api.get(`${process.env.HOST}/api/segredos`)
+  const res = await fetch(`${process.env.HOSTNAME}/api/segredos`)
 
-  return { props: { initialData: segredos } }
+  // const segredos: Segredo[] = await res.data
+  const segredos: Segredo[] = await res.json()
+
+  return {
+    props: {
+      initialData: segredos
+    }
+  }
 }

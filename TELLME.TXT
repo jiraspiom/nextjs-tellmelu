@@ -1,64 +1,67 @@
-import { useAxios } from '@/hooks/axiosinicial';
+
 import api from '@/services/api';
 import setCor from '@/services/cor';
 import Link from 'next/link'
-import router from 'next/router';
+import { useRouter } from 'next/router'
 import React, { useState } from 'react';
 
 interface ISegredo {
-  _id: string,
-  segredo: string,
-  cor: string
+    _id: string,
+    segredo: string,
+    cor: string
 }
 
-const Index = ({initialData}) => {
-  //descontruo a arrai data e dou o nome dele de segredos
-//   const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos', initialData);
-  
-  interface ISegredoState {
-    segredo: string,
-    cor: string,
-    dataAt: any
-  }
+const tellmeIndex = ({ initialData }) => {
+    const router = useRouter()
+    //descontruo a arrai data e dou o nome dele de segredos
+    //   const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos', initialData);
 
-  const [model, setModel] = useState<ISegredoState>({
-    segredo: '',
-    cor: '',
-    dataAt: ''
-  })
+    interface ISegredoState {
+        segredo: string,
+        cor: string,
+        dataAt: any
+    }
 
-  const handleChange = (event) => {
-    event.preventDefault();
-    const target = event.target
-
-    setModel({
-      ...model,
-      [target.name]: target.value,
-    })
-  }
-
-  const handleSubmit = () => {
-    model.dataAt = Date.now()
-    model.cor = setCor()
-
-    api.post('/api/segredos', model).then(res => {
-      console.log('salvou...', Date.now())
-    }).catch(error => {
-      console.log('erro ao salvar registro: ', error)
+    const [model, setModel] = useState<ISegredoState>({
+        segredo: '',
+        cor: '',
+        dataAt: ''
     })
 
-    model.segredo = ''
-    model.cor = ''
-    model.dataAt = ''
+    const handleChange = (event) => {
+        event.preventDefault();
+        const target = event.target
 
-    router.push('/tellme')
+        setModel({
+            ...model,
+            [target.name]: target.value,
+        })
+    }
 
-    // mutate()
+    const handleSubmit = () => {
+        model.dataAt = Date.now()
+        model.cor = setCor()
 
-  }
-  return (
-    <>
-      <div className="container">
+        api.post('/api/segredos', model).then(res => {
+            console.log('salvou...', Date.now())
+            //   router.push('/tellme')
+            router.reload()
+        }).catch(error => {
+            console.log('erro ao salvar registro: ', error)
+            //   router.push('/tellme')
+            router.reload()
+        })
+
+        // model.segredo = ''
+        // model.cor = ''
+        // model.dataAt = ''
+
+        // mutate()
+
+    }
+    return (
+        <>
+            <div className="container">
         <div className="col s12 m3"></div>
         <div className="col s12 m6">
           <div className="card  blue-grey darken-2">
@@ -100,17 +103,17 @@ const Index = ({initialData}) => {
           </div>
         ))}
       </div>
-    </>
-  )
+        </>
+    )
 }
 
-export default Index
+export default tellmeIndex
 
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.HOST}/api/segredos`)
+    const res = await fetch(`${process.env.HOST}/api/segredos`)
 
-  const segredos = await res.json()
+    const segredos = await res.json()
 
-  return { props: { initialData: segredos } }
+    return { props: { initialData: segredos } }
 }
