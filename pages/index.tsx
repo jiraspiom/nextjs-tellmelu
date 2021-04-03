@@ -3,7 +3,7 @@ import api from '@/services/api';
 import setCor from '@/services/cor';
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import Link from 'next/link'
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import React, { useState } from 'react';
 
 interface ISegredo {
@@ -15,7 +15,7 @@ interface ISegredo {
 
 
 
-const Index: NextPage = ({ initialData }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Index: NextPage = ({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) => {
   //descontruo a arrai data e dou o nome dele de segredos
   // const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
 
@@ -42,12 +42,13 @@ const Index: NextPage = ({ initialData }: InferGetStaticPropsType<typeof getStat
   }
 
   const handleSubmit = () => {
-    const router = useRouter()
+
     model.dataAt = Date.now()
     model.cor = setCor()
-
-    api.post('/api/segredos', model).then(res => {
+  
+    api.post(`${process.env.NEXT_PUBLIC_URL}/api/segredos`, model).then(res => {
       console.log('salvou...', Date.now())
+      
     }).catch(error => {
       console.log('erro ao salvar registro: ', error)
     })
@@ -87,7 +88,7 @@ const Index: NextPage = ({ initialData }: InferGetStaticPropsType<typeof getStat
 
 
       <div className="container">
-        {initialData?.map((item) => (
+        {segredos?.map((item) => (
           <div className="card" key={item._id}>
             <div className="col s12 m3"></div>
             <div className="col s12 m6">
@@ -124,11 +125,11 @@ export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(`${process.env.HOSTNAME}/api/segredos`)
 
   // const segredos: Segredo[] = await res.data
-  const segredos: Segredo[] = await res.json()
+  const {results} = await res.json()
 
   return {
     props: {
-      initialData: segredos
+      segredos: results
     }
   }
 }
