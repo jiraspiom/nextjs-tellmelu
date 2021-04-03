@@ -46,7 +46,7 @@ const Index: NextPage = ({ segredos }: InferGetStaticPropsType<typeof getStaticP
     model.dataAt = Date.now()
     model.cor = setCor()
   
-    api.post(`${process.env.NEXT_PUBLIC_URL}/api/segredos`, model).then(res => {
+    api.post('/api/segredos', model).then(res => {
       console.log('salvou...', Date.now())
       
     }).catch(error => {
