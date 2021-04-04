@@ -11,12 +11,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'GET':
       try {
-        const response = Segredo.find({}).sort({ dataAt: -1 }).limit(88); /* find all the data in our database */
-        
-        res.status(200).json({ success: true, results: response })
+        const results = await Segredo.find({}).sort({ dataAt: -1 }).limit(88); /* find all the data in our database */
+        res.status(200).json(results)
 
       } catch (error) {
         res.status(400).json({ error: 'Wrong request method' });
+        console.log(error)
       } 
       break
     case 'POST':

@@ -1,7 +1,8 @@
 
+import { useAxios } from '@/hooks/axios';
 import api from '@/services/api';
 import setCor from '@/services/cor';
-import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
+import { NextPage } from 'next';
 import Link from 'next/link'
 import router from 'next/router';
 import React, { useState } from 'react';
@@ -12,13 +13,12 @@ interface ISegredo {
   cor: string
 }
 
-
-
-
-const Index: NextPage = ({ segredos }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Index: NextPage = () => {
   //descontruo a arrai data e dou o nome dele de segredos
-  // const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
+  // const {data: segredos, mutate} = useAxios<ISegredo>('/api/segredos');
+  const { data: segredos, mutate } = useAxios<ISegredo[]>('/api/segredos');
 
+  console.log(segredos)
   interface ISegredoState {
     segredo: string,
     cor: string,
@@ -45,21 +45,21 @@ const Index: NextPage = ({ segredos }: InferGetStaticPropsType<typeof getStaticP
 
     model.dataAt = Date.now()
     model.cor = setCor()
-  
+
     api.post('/api/segredos', model).then(res => {
       console.log('salvou...', Date.now())
-      
+
     }).catch(error => {
       console.log('erro ao salvar registro: ', error)
     })
 
     router.push('/')
 
-    // model.segredo = ''
-    // model.cor = ''
-    // model.dataAt = ''
+    model.segredo = ''
+    model.cor = ''
+    model.dataAt = ''
 
-    // mutate()
+    mutate()
 
   }
   return (
@@ -114,22 +114,22 @@ const Index: NextPage = ({ segredos }: InferGetStaticPropsType<typeof getStaticP
 export default Index
 
 
-export const getStaticProps: GetStaticProps = async () => {
-  type Segredo = {
-    _id: string,
-    segredo: string,
-    cor: string
-  }
+// export const GetStaticProps = async () => {
+//   type Segredo = {
+//     _id: string,
+//     segredo: string,
+//     cor: string
+//   }
 
-  // const res = await api.get(`${process.env.HOST}/api/segredos`)
-  const res = await fetch(`${process.env.HOSTNAME}/api/segredos`)
+//   // const res = await api.get(`${process.env.HOST}/api/segredos`)
+//   const res = await fetch(`${process.env.HOSTNAME}/api/segredos`)
 
-  // const segredos: Segredo[] = await res.data
-  const {results} = await res.json()
+//   // const segredos: Segredo[] = await res.data
+//   const {results} = await res.json()
 
-  return {
-    props: {
-      segredos: results
-    }
-  }
-}
+//   return {
+//     props: {
+//       segredos: results
+//     }
+//   }
+// }
